@@ -80,7 +80,9 @@ public class ContactHelper extends HelperBase {
     public void deleteContacts() {
         openHomePage();
         if (getSelectorCount() == 0) {
-            createContact(3, new ContactData());
+            createContact(3, new ContactData()
+                    .withFirstname("Миша")
+                    .withLastname("Маваши"));
             deleteContacts();
         } else {
             clickAllElements(getList(By.name("selected[]")));
@@ -92,11 +94,16 @@ public class ContactHelper extends HelperBase {
     public void deleteContacts(int num) {
         openHomePage();
         if (getSelectorCount() == 0) {
-            createContact(num + 1, new ContactData());
+            createContact(num, new ContactData());
             deleteContacts(num);
         } else {
             getSelectorList().get(num - 1).click();
             clickElement(By.cssSelector("input[value=Delete]"));
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             // do smth
         }
     }

@@ -20,14 +20,14 @@ public class AppManager {
                 case "firefox" -> driver = new FirefoxDriver();
                 default -> throw new IllegalArgumentException(String.format("Browser %s is not supported", browser));
             }
-           Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
+            Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
             driver.get("http://localhost/addressbook/");
             driver.manage().window().maximize();
             getSession().login("admin", "secret");
         }
     }
 
-   public LoginHelper getSession() {
+    public LoginHelper getSession() {
         if (session == null) {
             session = new LoginHelper(this);
         }

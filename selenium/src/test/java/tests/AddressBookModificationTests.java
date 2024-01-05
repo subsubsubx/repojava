@@ -18,6 +18,4 @@ public class AddressBookModificationTests extends BaseTest {
         Assertions.assertEquals(s, appManager.getDriver().findElement(By
                 .xpath("//span[@class='group'][1]")).getText());
     }
-
-
 }

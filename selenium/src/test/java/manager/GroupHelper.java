@@ -51,7 +51,8 @@ public class GroupHelper extends HelperBase {
             getSelectorList().get(0).click();
             clickElement(By.name("edit"));
             clearGroupFields();
-            fillDataFields(groupData);;
+            fillDataFields(groupData);
+            ;
             submitAndReturn(By.name("update"));
         }
     }
@@ -74,6 +75,7 @@ public class GroupHelper extends HelperBase {
         setField(By.name("group_header"), groupData.getHeader());
         setField(By.name("group_footer"), groupData.getFooter());
     }
+
     private void submitAndReturn(By by) {
         clickElement(by);
         clickElement(By.linkText("group page"));

@@ -16,21 +16,20 @@ public class AddressBookRemoveTests extends BaseTest {
     @Test
     void deleteAllGroupsTest() {
         appManager.getGroup().deleteGroups();
-         Assertions.assertThrows(NoSuchElementException.class, () -> appManager.getDriver()
+        Assertions.assertThrows(NoSuchElementException.class, () -> appManager.getDriver()
                 .findElement(By.name("selected[]")));
     }
 
     @Test
     void deleteContactTest() {
-        appManager.getContact().deleteContacts(2);
-
+        appManager.getContact().deleteContacts(1);
     }
 
     @Test
     void deleteAllContactsTest() {
-        appManager.getContact().deleteContacts(3);
-              /*  Assertions.assertThrows(NoSuchElementException.class, () -> appManager.getDriver()
-                .findElement(By.name("selected[]")));*/
+        appManager.getContact().deleteContacts();
+        Assertions.assertThrows(NoSuchElementException.class, () -> appManager.getDriver()
+                .findElement(By.name("selected[]")));
     }
 
 }

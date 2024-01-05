@@ -50,9 +50,11 @@ public class HelperBase {
         appManager.getDriver().findElement(by).sendKeys(s);
 
     }
-    protected List<WebElement> getSelectorList(){
+
+    protected List<WebElement> getSelectorList() {
         return getList(By.name("selected[]"));
     }
+
     public int getSelectorCount() {
         return getSelectorList().size();
     }
