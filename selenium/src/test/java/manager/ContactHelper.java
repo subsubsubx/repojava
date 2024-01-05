@@ -85,9 +85,8 @@ public class ContactHelper extends HelperBase {
                     .withLastname("Маваши"));
             deleteContacts();
         } else {
-            clickAllElements(getList(By.name("selected[]")));
+            clickAllElements(getSelectorList());
             clickElement(By.cssSelector("input[value=Delete]"));
-            // do smth
         }
     }
 
@@ -99,12 +98,6 @@ public class ContactHelper extends HelperBase {
         } else {
             getSelectorList().get(num - 1).click();
             clickElement(By.cssSelector("input[value=Delete]"));
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            // do smth
         }
     }
 

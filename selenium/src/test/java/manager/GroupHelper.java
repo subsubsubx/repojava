@@ -52,7 +52,6 @@ public class GroupHelper extends HelperBase {
             clickElement(By.name("edit"));
             clearGroupFields();
             fillDataFields(groupData);
-            ;
             submitAndReturn(By.name("update"));
         }
     }
