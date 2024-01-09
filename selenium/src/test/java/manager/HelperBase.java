@@ -51,11 +51,7 @@ public class HelperBase {
 
     }
 
-    protected List<WebElement> getSelectorList() {
+    public List<WebElement> getOptionsList() {
         return getList(By.name("selected[]"));
-    }
-
-    public int getSelectorCount() {
-        return getSelectorList().size();
     }
 }

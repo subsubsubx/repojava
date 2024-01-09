@@ -4,6 +4,7 @@ import model.ContactData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ContactHelper extends HelperBase {
     }
 
 
-    public void openContactPage() {
+    public void openAddNewContact() {
         clickElement(By.linkText("add new"));
     }
 
@@ -23,83 +24,93 @@ public class ContactHelper extends HelperBase {
     }
 
 
-    public void createContact(int times, ContactData contact) {
-        for (int i = 1; i <= times; i++) {
-            openContactPage();
-            fillContactInputFields(contact);
- /*
-            List<WebElement> bdayList = appManager.getDriver().findElements(By
-                    .xpath("//select[@name='bday']/option"));
-            selectFromList(contact.getBday(), bdayList);
-            List<WebElement> bmonthList = appManager.getDriver().findElements(By
-                    .xpath("//select[@name='bmonth']/option"));
-            selectFromList(contact.getBmonth(), bmonthList);
-            clickElement(By.name("byear")).sendKeys(contact.getByear());
-
-          List<WebElement> adayList = appManager.getDriver().findElements(By
-                    .xpath("//select[@name='aday']/option"));
-            selectFromList(contact.getAday(), adayList);
-            List<WebElement> amonthList = appManager.getDriver().findElements(By
-                    .xpath("//select[@name='amonth']/option"));
-            selectFromList(contact.getAmonth(), amonthList);
-            clickElement(By.name("ayear")).sendKeys(contact.getAyear());
-*/
-            selectFromDayMonthList("bday", contact);
-            selectFromDayMonthList("bmonth", contact);
-            selectYear("byear", contact);
-            selectFromDayMonthList("aday", contact);
-            selectFromDayMonthList("amonth", contact);
-            selectYear("ayear", contact);
-            List<WebElement> groupList = getList(By.name("new_group"));
-            if (groupList.size() > 1) {
-                selectFromList(contact.getGroup(), groupList);
-            }
-            submitAndReturn(By.name("submit"));
+    public void createContact(ContactData contact) {
+        openAddNewContact();
+        fillContactInputFields(contact);
+        selectFromDayMonthList("bday", contact);
+        selectFromDayMonthList("bmonth", contact);
+        selectYear("byear", contact);
+        selectFromDayMonthList("aday", contact);
+        selectFromDayMonthList("amonth", contact);
+        selectYear("ayear", contact);
+        List<WebElement> groupList = getList(By.name("new_group"));
+        if (groupList.size() > 1) {
+            selectFromList(contact.getGroup(), groupList);
         }
+        submitAndReturn(By.name("submit"));
     }
 
     private void fillContactInputFields(ContactData contact) {
+        clickElement(By.name("firstname")).clear();
         setField(By.name("firstname"), contact.getFirstname());
+        clickElement(By.name("middlename")).clear();
         setField(By.name("middlename"), contact.getMiddlename());
+        clickElement(By.name("lastname")).clear();
         setField(By.name("lastname"), contact.getLastname());
+        clickElement(By.name("nickname")).clear();
         setField(By.name("nickname"), contact.getNickname());
+        clickElement(By.name("title")).clear();
         setField(By.name("title"), contact.getTitle());
+        clickElement(By.name("company")).clear();
         setField(By.name("company"), contact.getCompany());
+        clickElement(By.name("address")).clear();
         setField(By.name("address"), contact.getAddress());
+        clickElement(By.name("home")).clear();
         setField(By.name("home"), contact.getHome());
+        clickElement(By.name("mobile")).clear();
         setField(By.name("mobile"), contact.getMobile());
+        clickElement(By.name("work")).clear();
         setField(By.name("work"), contact.getWork());
+        clickElement(By.name("fax")).clear();
         setField(By.name("fax"), contact.getFax());
+        clickElement(By.name("email")).clear();
         setField(By.name("email"), contact.getEmail());
+        clickElement(By.name("email2")).clear();
         setField(By.name("email2"), contact.getEmail2());
+        clickElement(By.name("email3")).clear();
         setField(By.name("email3"), contact.getEmail3());
+        clickElement(By.name("homepage")).clear();
         setField(By.name("homepage"), contact.getHomepage());
     }
 
 
-    public void deleteContacts() {
-        openHomePage();
-        if (getSelectorCount() == 0) {
-            createContact(3, new ContactData()
-                    .withFirstname("Миша")
-                    .withLastname("Маваши"));
-            deleteContacts();
+    public void deleteAllContacts() {
+        if (getContactCount() == 0) {
+            createContact(new ContactData()
+                    .withFirstname("Test")
+                    .withLastname("Qwe"));
+            deleteAllContacts();
         } else {
-            clickAllElements(getSelectorList());
+            clickAllElements(getOptionsList());
             clickElement(By.cssSelector("input[value=Delete]"));
         }
     }
 
-    public void deleteContacts(int num) {
+    public void deleteContacts(ContactData contactData) {
         openHomePage();
-        if (getSelectorCount() == 0) {
-            createContact(num, new ContactData());
-            deleteContacts(num);
-        } else {
-            getSelectorList().get(num - 1).click();
-            clickElement(By.cssSelector("input[value=Delete]"));
-        }
+        selectCheckboxContact(contactData);
+        clickElement(By.cssSelector("input[value=Delete]"));
+        openHomePage();
     }
+
+
+    public void selectCheckboxContact(ContactData contactData) {
+        clickElement(By.cssSelector(String.format("input[value='%s']", contactData.getId())));
+    }
+
+    public void modifyContact(ContactData contactData, ContactData modify) {
+        openHomePage();
+        clickEditContract(contactData);
+        fillContactInputFields(modify);
+        submitAndReturn(By.name("update"));
+    }
+
+    private void clickEditContract(ContactData contactData) {
+        clickElement(By.xpath("//a[contains(@href, 'edit.php?id=" + contactData.getId() + "')]"));
+
+    }
+
+
 
 
     private void selectFromDayMonthList(String s, ContactData contact) {
@@ -125,6 +136,23 @@ public class ContactHelper extends HelperBase {
     private void submitAndReturn(By by) {
         clickElement(by);
         clickElement(By.linkText("home page"));
+    }
+
+    public int getContactCount() {
+        openHomePage();
+        return getOptionsList().size();
+    }
+
+    public ArrayList<ContactData> getContactList() {
+        ArrayList<ContactData> res = new ArrayList<>();
+        List<WebElement> list = getList(By.xpath("//tr[@name='entry']"));
+        for (WebElement element : list) {
+            String[] text = element.getText().split(" ", 3);
+            WebElement checkbox = element.findElement(By.name("selected[]"));
+            String id = checkbox.getAttribute("value");
+            res.add(new ContactData().withId(id).withFirstname(text[1]).withLastname(text[0]));
+        }
+        return res;
     }
 }
 

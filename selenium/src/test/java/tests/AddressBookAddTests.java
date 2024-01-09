@@ -3,63 +3,50 @@ package tests;
 import model.ContactData;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class AddressBookAddTests extends BaseTest {
 
-    @Test
-    void createEmptyGroupTest() {
-        appManager.getGroup().createGroup(1, new GroupData());
-        Assertions.assertTrue(appManager.getGroup().getSelectorCount() >= 1);
+    @ParameterizedTest
+    @MethodSource("groupsProvider")
+    void createGroupsTest(GroupData groupData) {
+        List<GroupData> before = appManager.getGroup().getGroupList();
+        appManager.getGroup().createGroup(groupData);
+        List<GroupData> after = appManager.getGroup().getGroupList();
+        List<GroupData> expectedList = new ArrayList<>(before);
+        Comparator<GroupData> comparator = Comparator.comparingInt(a -> Integer.parseInt(a.getId()));
+        after.sort(comparator);
+        expectedList.add(groupData.withId(after.get(after.size() - 1).getId()).withFooter("").withHeader(""));
+        expectedList.sort(comparator);
+        Assertions.assertEquals(expectedList, after);
     }
 
-    @Test
-    void createGroupWithParamsTest() {
-        appManager.getGroup().createGroup(1, new GroupData()
-                .withName("NAME!!!")
-                .withHeader("QWAS WEX EXORT")
-                .withFooter("FOOTER!!!!111"));
-        Assertions.assertTrue(appManager.getGroup().getSelectorCount() >= 1);
+    @ParameterizedTest
+    @MethodSource("negativeGroupsProvider")
+    void createGroupNegativeTest(GroupData groupData) {
+
+        List<GroupData> before = appManager.getGroup().getGroupList();
+        appManager.getGroup().createGroup(groupData);
+        List<GroupData> after = appManager.getGroup().getGroupList();
+        Assertions.assertEquals(before, after);
     }
 
-    @Test
-    void createGroupWithConstructorTest() {
-        appManager.getGroup().createGroup(1, new GroupData("qwe", "asd", "zxc"));
-        Assertions.assertTrue(appManager.getGroup().getSelectorCount() >= 1);
+    @ParameterizedTest
+    @MethodSource("contactsProvider")
+    void createContactsTest(ContactData contactData) {
+        List<ContactData> before = appManager.getContact().getContactList();
+        appManager.getContact().createContact(contactData);
+        List<ContactData> after = appManager.getContact().getContactList();
+        List<ContactData> expectedList = new ArrayList<>(before);
+        Comparator<ContactData> comparator = Comparator.comparingInt(a -> Integer.parseInt(a.getId()));
+        after.sort(comparator);
+        expectedList.add(contactData.withId(after.get(after.size() - 1).getId()));
+        expectedList.sort(comparator);
+        Assertions.assertEquals(expectedList, after);
     }
-
-
-    @Test
-    void createEmptyContactTest() {
-        appManager.getContact().createContact(1, new ContactData());
-        Assertions.assertTrue(appManager.getContact().getSelectorCount() >= 1);
-    }
-
-    @Test
-    void createContactWithParamsTest() {
-        appManager.getContact().createContact(1, new ContactData()
-                .withFirstname("Firstname")
-                .withLastname("Lastname")
-                .withMiddlename("Middlename")
-                .withNickname("Nickname")
-                .withTitle("Title")
-                .withCompany("Company")
-                .withAddress("Address")
-                .withHome("8800")
-                .withMobile("555")
-                .withWork("3535")
-                .withFax("99999999")
-                .withEmail("e@mail.com")
-                .withEmail2("e@mail2.com")
-                .withEmail3("e@mail3.com")
-                .withHomepage("homepage.co")
-                .withBday("10")
-                .withBmonth("May")
-                .withByear("1990")
-                .withAday("19")
-                .withAmonth("June")
-                .withAyear("1999"));
-        Assertions.assertTrue(appManager.getContact().getSelectorCount() >= 1);
-    }
-
 }

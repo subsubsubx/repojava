@@ -1,7 +1,10 @@
 package model;
 
+import java.util.Objects;
+
 public class ContactData {
 
+    private String id;
     private String firstname;
     private String middlename;
     private String lastname;
@@ -26,6 +29,7 @@ public class ContactData {
     private String group;
 
     public ContactData() {
+        this.id = "";
         this.firstname = "";
         this.middlename = "";
         this.lastname = "";
@@ -153,6 +157,16 @@ public class ContactData {
     public ContactData withAyear(String ayear) {
         this.ayear = ayear;
         return this;
+
+    }
+
+    public ContactData withId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getFirstname() {
@@ -231,6 +245,7 @@ public class ContactData {
         return aday;
     }
 
+
     public String getAmonth() {
         return amonth;
     }
@@ -243,4 +258,14 @@ public class ContactData {
         return group;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactData that = (ContactData) o;
+        return Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
+    }
+    public String toString() {
+        return "ContactData [id - " + id + ", name - " + firstname + ", lastname - " + lastname + "]";
+    }
 }
