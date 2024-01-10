@@ -111,8 +111,6 @@ public class ContactHelper extends HelperBase {
     }
 
 
-
-
     private void selectFromDayMonthList(String s, ContactData contact) {
         List<WebElement> list = appManager.getDriver().findElements(By
                 .xpath("//select[@name='" + s + "']/option"));
@@ -147,10 +145,13 @@ public class ContactHelper extends HelperBase {
         ArrayList<ContactData> res = new ArrayList<>();
         List<WebElement> list = getList(By.xpath("//tr[@name='entry']"));
         for (WebElement element : list) {
-            String[] text = element.getText().split(" ", 3);
+       //     String[] text = element.getText().split(" ", 3);
+            String name = element.findElement(By.xpath("./td[3]")).getText();
+            String surname = element.findElement(By.xpath("./td[2]")).getText();
             WebElement checkbox = element.findElement(By.name("selected[]"));
             String id = checkbox.getAttribute("value");
-            res.add(new ContactData().withId(id).withFirstname(text[1]).withLastname(text[0]));
+            res.add(new ContactData().withId(id).withFirstname(name).withLastname(surname));
+         //   res.add(new ContactData().withId(id).withFirstname(text[1]).withLastname(text[0]));
         }
         return res;
     }
