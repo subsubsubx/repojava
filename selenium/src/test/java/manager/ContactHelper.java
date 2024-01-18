@@ -40,37 +40,24 @@ public class ContactHelper extends HelperBase {
         submitAndReturn(By.name("submit"));
     }
 
+
     private void fillContactInputFields(ContactData contact) {
-        clickElement(By.name("firstname")).clear();
-        setField(By.name("firstname"), contact.getFirstname());
-        clickElement(By.name("middlename")).clear();
-        setField(By.name("middlename"), contact.getMiddlename());
-        clickElement(By.name("lastname")).clear();
-        setField(By.name("lastname"), contact.getLastname());
-        clickElement(By.name("nickname")).clear();
-        setField(By.name("nickname"), contact.getNickname());
-        clickElement(By.name("title")).clear();
-        setField(By.name("title"), contact.getTitle());
-        clickElement(By.name("company")).clear();
-        setField(By.name("company"), contact.getCompany());
-        clickElement(By.name("address")).clear();
-        setField(By.name("address"), contact.getAddress());
-        clickElement(By.name("home")).clear();
-        setField(By.name("home"), contact.getHome());
-        clickElement(By.name("mobile")).clear();
-        setField(By.name("mobile"), contact.getMobile());
-        clickElement(By.name("work")).clear();
-        setField(By.name("work"), contact.getWork());
-        clickElement(By.name("fax")).clear();
-        setField(By.name("fax"), contact.getFax());
-        clickElement(By.name("email")).clear();
-        setField(By.name("email"), contact.getEmail());
-        clickElement(By.name("email2")).clear();
-        setField(By.name("email2"), contact.getEmail2());
-        clickElement(By.name("email3")).clear();
-        setField(By.name("email3"), contact.getEmail3());
-        clickElement(By.name("homepage")).clear();
-        setField(By.name("homepage"), contact.getHomepage());
+        clearSetField(By.name("firstname"), contact.getFirstname());
+        clearSetField(By.name("middlename"), contact.getMiddlename());
+        clearSetField(By.name("lastname"), contact.getLastname());
+        clearSetField(By.name("nickname"), contact.getNickname());
+        if (contact.getPhoto() != null) {
+            attachFile(By.name("photo"), contact.getPhoto());
+        }
+        clearSetField(By.name("title"), contact.getTitle());
+        clearSetField(By.name("home"), contact.getHome());
+        clearSetField(By.name("mobile"), contact.getMobile());
+        clearSetField(By.name("work"), contact.getWork());
+        clearSetField(By.name("fax"), contact.getFax());
+        clearSetField(By.name("email"), contact.getEmail());
+        clearSetField(By.name("email2"), contact.getEmail2());
+        clearSetField(By.name("email3"), contact.getEmail3());
+        clearSetField(By.name("homepage"), contact.getHomepage());
     }
 
 
@@ -142,16 +129,17 @@ public class ContactHelper extends HelperBase {
     }
 
     public ArrayList<ContactData> getContactList() {
+        openHomePage();
         ArrayList<ContactData> res = new ArrayList<>();
         List<WebElement> list = getList(By.xpath("//tr[@name='entry']"));
         for (WebElement element : list) {
-       //     String[] text = element.getText().split(" ", 3);
+            //     String[] text = element.getText().split(" ", 3);
             String name = element.findElement(By.xpath("./td[3]")).getText();
             String surname = element.findElement(By.xpath("./td[2]")).getText();
             WebElement checkbox = element.findElement(By.name("selected[]"));
             String id = checkbox.getAttribute("value");
             res.add(new ContactData().withId(id).withFirstname(name).withLastname(surname));
-         //   res.add(new ContactData().withId(id).withFirstname(text[1]).withLastname(text[0]));
+            //   res.add(new ContactData().withId(id).withFirstname(text[1]).withLastname(text[0]));
         }
         return res;
     }

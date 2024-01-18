@@ -1,10 +1,12 @@
 package tests;
 
+import common.Common;
 import model.ContactData;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,15 +20,15 @@ public class AddressBookModificationTests extends BaseTest {
         if (appManager.getGroup().getGroupCount() == 0) {
             for (int i = 0; i < 2; i++) {
                 appManager.getGroup().createGroup(new GroupData()
-                        .withName(randomString(5))
-                        .withHeader(randomString(5))
-                        .withFooter(randomString(5)));
+                        .withName(Common.randomString(5))
+                        .withHeader(Common.randomString(5))
+                        .withFooter(Common.randomString(5)));
             }
         }
         List<GroupData> before = appManager.getGroup().getGroupList();
         int randomIndex = new Random().nextInt(before.size());
         GroupData randomGroup = new GroupData()
-                .withName("Name Modified!" + randomString(10));
+                .withName("Name Modified!" + Common.randomString(10));
         appManager.getGroup().modifyGroup(before.get(randomIndex), randomGroup);
         List<GroupData> after = appManager.getGroup().getGroupList();
         List<GroupData> expectedList = new ArrayList<>(before);
@@ -38,19 +40,19 @@ public class AddressBookModificationTests extends BaseTest {
     }
 
     @Test
-    void modifyContactTest() {
+    void modifyContactTest() throws IOException {
         if (appManager.getContact().getContactCount() == 0) {
             for (int i = 0; i < 2; i++) {
                 appManager.getContact().createContact(new ContactData()
-                        .withFirstname(randomString(5))
-                        .withLastname(randomString(5)));
+                        .withFirstname(Common.randomString(5))
+                        .withLastname(Common.randomString(5)));
             }
         }
         List<ContactData> before = appManager.getContact().getContactList();
         int randomIndex = new Random().nextInt(before.size());
         ContactData randomContact = contactsProvider().get(0)
-                .withFirstname("FirstnameModified!" + randomString(4))
-                .withLastname("LastnameModified!" + randomString(4));
+                .withFirstname("FirstnameModified!" + Common.randomString(4))
+                .withLastname("LastnameModified!" + Common.randomString(4));
         appManager.getContact().modifyContact(before.get(randomIndex), randomContact);
         List<ContactData> after = appManager.getContact().getContactList();
         List<ContactData> expectedList = new ArrayList<>(before);

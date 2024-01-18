@@ -1,8 +1,10 @@
 package tests;
 
+import common.Common;
 import model.ContactData;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -11,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AddressBookAddTests extends BaseTest {
+
 
     @ParameterizedTest
     @MethodSource("groupsProvider")
@@ -26,6 +29,9 @@ public class AddressBookAddTests extends BaseTest {
         Assertions.assertEquals(expectedList, after);
     }
 
+
+
+
     @ParameterizedTest
     @MethodSource("negativeGroupsProvider")
     void createGroupNegativeTest(GroupData groupData) {
@@ -34,6 +40,14 @@ public class AddressBookAddTests extends BaseTest {
         appManager.getGroup().createGroup(groupData);
         List<GroupData> after = appManager.getGroup().getGroupList();
         Assertions.assertEquals(before, after);
+    }
+
+    @Test
+    void createContactWithPhotoTest(){
+        ContactData contactData = new ContactData()
+                .withNickname("asd")
+                .withPhoto(Common.getRandomFile("src/test/resources/img"));
+        appManager.getContact().createContact(contactData);
     }
 
     @ParameterizedTest

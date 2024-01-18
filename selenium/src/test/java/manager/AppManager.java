@@ -4,6 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.Properties;
+
 
 public class AppManager {
 
@@ -12,8 +14,10 @@ public class AppManager {
     private GroupHelper group;
     private ContactHelper contact;
 
+    private Properties properties;
 
-    public void init(String browser) {
+    public void init(String browser, Properties properties) {
+        this.properties = properties;
         if (driver == null) {
             switch (browser) {
                 case "chrome" -> driver = new ChromeDriver();
@@ -21,9 +25,11 @@ public class AppManager {
                 default -> throw new IllegalArgumentException(String.format("Browser %s is not supported", browser));
             }
             Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
-            driver.get("http://localhost/addressbook/");
+            driver.get(properties.getProperty("web.baseUrl"));
+          //  driver.get("http://localhost/addressbook/");
             driver.manage().window().maximize();
-            getSession().login("admin", "secret");
+          //  getSession().login("admin", "secret");
+            getSession().login(properties.getProperty("web.username"), properties.getProperty("web.password"));
         }
     }
 

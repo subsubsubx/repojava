@@ -9,6 +9,7 @@ public class ContactData {
     private String middlename;
     private String lastname;
     private String nickname;
+    private String photo;
     private String title;
     private String company;
     private String address;
@@ -71,6 +72,11 @@ public class ContactData {
 
     public ContactData withNickname(String nickname) {
         this.nickname = nickname;
+        return this;
+    }
+
+    public ContactData withPhoto(String photo) {
+        this.photo = photo;
         return this;
     }
 
@@ -213,6 +219,11 @@ public class ContactData {
         return fax;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+
     public String getEmail() {
         return email;
     }
@@ -265,6 +276,12 @@ public class ContactData {
         ContactData that = (ContactData) o;
         return Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstname, lastname);
+    }
+
     public String toString() {
         return "ContactData [id - " + id + ", name - " + firstname + ", lastname - " + lastname + "]";
     }

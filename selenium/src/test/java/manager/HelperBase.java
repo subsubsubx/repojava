@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 public class HelperBase {
@@ -49,6 +50,15 @@ public class HelperBase {
     protected void setField(By by, String s) {
         appManager.getDriver().findElement(by).sendKeys(s);
 
+    }
+
+    protected void clearSetField(By by, String s) {
+        appManager.getDriver().findElement(by).clear();
+        appManager.getDriver().findElement(by).sendKeys(s);
+    }
+
+    protected void attachFile(By by, String s){
+        appManager.getDriver().findElement(by).sendKeys(Paths.get(s).toAbsolutePath().toString());
     }
 
     public List<WebElement> getOptionsList() {

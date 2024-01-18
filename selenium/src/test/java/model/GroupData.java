@@ -72,5 +72,10 @@ public class GroupData {
         return Objects.equals(id, groupData.id) && Objects.equals(name, groupData.name) && Objects.equals(header, groupData.header) && Objects.equals(footer, groupData.footer);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, header, footer);
+    }
+
 
 }
