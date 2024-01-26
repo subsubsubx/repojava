@@ -10,6 +10,9 @@ import java.util.List;
 
 public class HelperBase {
     protected AppManager appManager;
+    public HelperBase(AppManager appManager){
+        this.appManager = appManager;
+    }
 
     protected void clickAllElements(List<WebElement> list) {
         for (WebElement element : list) {

@@ -1,8 +1,10 @@
 package manager;
 
 import model.ContactData;
+import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -11,7 +13,8 @@ import java.util.List;
 public class ContactHelper extends HelperBase {
 
     public ContactHelper(AppManager appManager) {
-        this.appManager = appManager;
+        super(appManager);
+        //   this.appManager = appManager;
     }
 
 
@@ -33,13 +36,42 @@ public class ContactHelper extends HelperBase {
         selectFromDayMonthList("aday", contact);
         selectFromDayMonthList("amonth", contact);
         selectYear("ayear", contact);
-        List<WebElement> groupList = getList(By.name("new_group"));
-        if (groupList.size() > 1) {
-            selectFromList(contact.getGroup(), groupList);
-        }
         submitAndReturn(By.name("submit"));
     }
 
+    public void createContact(ContactData contact, GroupData groupData) {
+        openAddNewContact();
+        fillContactInputFields(contact);
+        selectFromDayMonthList("bday", contact);
+        selectFromDayMonthList("bmonth", contact);
+        selectYear("byear", contact);
+        selectFromDayMonthList("aday", contact);
+        selectFromDayMonthList("amonth", contact);
+        selectYear("ayear", contact);
+        selectGroup(groupData);
+        submitAndReturn(By.name("submit"));
+    }
+
+    private void selectGroup(GroupData groupData) {
+        new Select(appManager.getDriver().findElement(By.name("new_group"))).selectByValue(groupData.getId());
+    }
+
+    public void addContactToGroup(ContactData contact, GroupData group) {
+        openHomePage();
+        selectCheckboxContact(contact);
+        new Select(appManager.getDriver().findElement(By.name("to_group"))).selectByValue(group.getId());
+        clickElement(By.name("add"));
+        openHomePage();
+    }
+
+    public void deleteContactFromGroup(ContactData contact, GroupData groupData) {
+        openHomePage();
+        new Select(appManager.getDriver().findElement(By.name("group"))).selectByValue(groupData.getId());
+        selectCheckboxContact(contact);
+        clickElement(By.cssSelector("input[name=remove]"));
+        clickElement(By.partialLinkText("group page"));
+        new Select(appManager.getDriver().findElement(By.name("group"))).selectByVisibleText("[all]");
+    }
 
     private void fillContactInputFields(ContactData contact) {
         clearSetField(By.name("firstname"), contact.getFirstname());
@@ -79,6 +111,8 @@ public class ContactHelper extends HelperBase {
         clickElement(By.cssSelector("input[value=Delete]"));
         openHomePage();
     }
+
+
 
 
     public void selectCheckboxContact(ContactData contactData) {
@@ -133,16 +167,16 @@ public class ContactHelper extends HelperBase {
         ArrayList<ContactData> res = new ArrayList<>();
         List<WebElement> list = getList(By.xpath("//tr[@name='entry']"));
         for (WebElement element : list) {
-            //     String[] text = element.getText().split(" ", 3);
             String name = element.findElement(By.xpath("./td[3]")).getText();
             String surname = element.findElement(By.xpath("./td[2]")).getText();
             WebElement checkbox = element.findElement(By.name("selected[]"));
             String id = checkbox.getAttribute("value");
             res.add(new ContactData().withId(id).withFirstname(name).withLastname(surname));
-            //   res.add(new ContactData().withId(id).withFirstname(text[1]).withLastname(text[0]));
         }
         return res;
     }
+
+
 }
 
 

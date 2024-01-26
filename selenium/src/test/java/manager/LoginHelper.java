@@ -4,7 +4,8 @@ import org.openqa.selenium.By;
 
 public class LoginHelper extends HelperBase {
     public LoginHelper(AppManager appManager) {
-        this.appManager = appManager;
+        super(appManager);
+     //   this.appManager = appManager;
     }
 
     public void login(String id, String pwd) {

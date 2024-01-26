@@ -10,7 +10,8 @@ import java.util.List;
 public class GroupHelper extends HelperBase {
 
     public GroupHelper(AppManager appManager) {
-        this.appManager = appManager;
+        super(appManager);
+     //   this.appManager = appManager;
     }
 
     public void createGroup(GroupData groupData) {
@@ -22,6 +23,7 @@ public class GroupHelper extends HelperBase {
 
 
     public void deleteAllGroups() {
+        openGroupsPage();
         clickAllElements(getOptionsList());
         submitAndReturn(By.name("delete"));
     }
@@ -35,6 +37,7 @@ public class GroupHelper extends HelperBase {
 
 
     public void modifyGroup(GroupData oldGroup, GroupData newGroup) {
+        openGroupsPage();
         selectGroup(oldGroup);
         clickElement(By.name("edit"));
         clearGroupFields();
@@ -43,7 +46,7 @@ public class GroupHelper extends HelperBase {
     }
 
 
-    protected void openGroupsPage() {
+    public void openGroupsPage() {
         if (!isElementPresent(By.name("new"))) {
             clickElement(By.linkText("groups"));
         }

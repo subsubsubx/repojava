@@ -6,6 +6,7 @@ import common.Common;
 import manager.AppManager;
 import model.ContactData;
 import model.GroupData;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.BufferedReader;
@@ -123,10 +124,11 @@ public class BaseTest {
         return res;
     }
 
-    /*    @AfterEach
-        public void after() {
-            appManager.getDriver().quit();
-        }*/
+    @AfterEach
+    public void after() {
+        appManager.getJdbcHelper().check();
+        //  appManager.getDriver().quit();
+    }
 
 }
 
