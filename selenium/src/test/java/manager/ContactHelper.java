@@ -63,7 +63,7 @@ public class ContactHelper extends HelperBase {
         selectCheckboxContact(contact);
         new Select(appManager.getDriver().findElement(By.name("to_group"))).selectByValue(group.getId());
         clickElement(By.name("add"));
-        openHomePage();
+        clickElement(By.partialLinkText("group page"));
     }
 
     public void deleteContactFromGroup(ContactData contact, GroupData groupData) {
@@ -193,7 +193,7 @@ public class ContactHelper extends HelperBase {
                 .filter(e -> !e.equals(""))
                 .collect(Collectors.joining("\n"));
     }
-    
+
     public String getValueFromName(String name) {
         return appManager.getDriver().findElement(By.name(name)).getAttribute("value");
     }

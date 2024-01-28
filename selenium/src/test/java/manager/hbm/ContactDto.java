@@ -1,9 +1,9 @@
 package manager.hbm;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "addressbook")
@@ -26,6 +26,15 @@ public class ContactDto {
     private String email2;
     private String email3;
 
+
+    @ManyToMany
+    @JoinTable(name = "address_in_groups",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private List<GroupDto> groups;
+
+
+
     public ContactDto() {
     }
 
@@ -44,6 +53,14 @@ public class ContactDto {
         this.email = email;
         this.email2 = email2;
         this.email3 = email3;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public List<GroupDto> getGroups() {
+        return groups;
     }
 
     public String getHome() {

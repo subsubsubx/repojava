@@ -15,9 +15,7 @@ public class AppManager {
     private ContactHelper contact;
     private Properties properties;
     private JdbcHelper jdbcHelper;
-    private  HibernateHelper hbm;
-
-
+    private HibernateHelper hbm;
 
 
     public void init(String browser, Properties properties) {
@@ -28,11 +26,9 @@ public class AppManager {
                 case "firefox" -> driver = new FirefoxDriver();
                 default -> throw new IllegalArgumentException(String.format("Browser %s is not supported", browser));
             }
-                    Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
+            Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
             driver.get(properties.getProperty("web.baseUrl"));
-            //  driver.get("http://localhost/addressbook/");
             driver.manage().window().maximize();
-            //  getSession().login("admin", "secret");
             getSession().login(properties.getProperty("web.username"), properties.getProperty("web.password"));
         }
     }

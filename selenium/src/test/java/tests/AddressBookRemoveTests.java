@@ -8,9 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class AddressBookRemoveTests extends BaseTest {
 
@@ -52,34 +50,47 @@ public class AddressBookRemoveTests extends BaseTest {
 
     @Test
     void removeContactFromGroup() {
-        if (appManager.getHbm().getGroupCount() == 0) {
-            appManager.getHbm().createGroup(new GroupData("", "qwe", "asd", "zxc"));
-        }
-        if (appManager.getHbm().getContactCount() == 0) {
-            appManager.getContact().createContact(new ContactData()
-                    .withNickname("asd")
-                    .withPhoto(Common.getRandomFile("src/test/resources/img")));
-        }
 
-        long rnd = new Random().nextLong(appManager.getHbm().getContactCount());
-        ContactData randomContact = appManager.getHbm().getContactList().get((int) rnd);
-
-        GroupData randomGroup = appManager.getHbm().getGroupList().stream()
+        List<GroupData> before;
+        Optional<GroupData> randomGroup = appManager.getHbm().getGroupList()
+                .stream()
                 .filter(group -> !group.getName().equals(""))
-                .findFirst().get();
+                .findFirst();
+        if (randomGroup.isEmpty()) {
+            appManager.getHbm().createGroup(new GroupData("", "qwe", "asd", "zxc"));
+            randomGroup = appManager.getHbm().getGroupList()
+                    .stream()
+                    .filter(group -> !group.getName().equals(""))
+                    .findFirst();
+        }
+        Optional<ContactData> validContact = appManager.getHbm().getContactList()
+                .stream()
+                .filter(e -> appManager.getHbm().getGroupsInContacts(e).size() == 0)
+                .findFirst();
+        if (validContact.isEmpty()) {
+            before = null;
+            appManager.getContact().createContact(new ContactData()
+                    .withFirstname(Common.randomString(15))
+                    .withLastname(Common.randomString(10))
+                    .withPhoto(Common.getRandomFile("src/test/resources/img")));
+            validContact = appManager.getHbm().getContactList().stream()
+                    .filter(e -> appManager.getHbm().getGroupsInContacts(e).size() == 0)
+                    .findFirst();
+        } else {
+            appManager.getContact().addContactToGroup(validContact.get(), randomGroup.get());
+            before = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact.get()));
+            appManager.getContact().deleteContactFromGroup(validContact.get(), randomGroup.get());
+
+        }
+     //   WebDriverWait wait = new WebDriverWait(appManager.getDriver(), Duration.ofSeconds(3));
+    //    wait.until(ExpectedConditions.)
+        List<GroupData> after = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact.get()));
+        List<GroupData> expectedList = new ArrayList<>(before);
+        List<GroupData> func = before.stream().filter(e -> !after.contains(e)).toList();
+        expectedList.remove(func.get(0));
+        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
 
 
-        appManager.getContact().addContactToGroup(randomContact, randomGroup);
-
-        List<ContactData> before = appManager.getHbm().getContactsInGroup(randomGroup);
-
-        appManager.getContact().deleteContactFromGroup(randomContact, randomGroup);
-
-        List<ContactData> after = appManager.getHbm().getContactsInGroup(randomGroup);
-        List<ContactData> expectedList = new ArrayList<>(before);
-        expectedList.remove(appManager.getHbm().getContactList().get((int) rnd));
-
-        Assertions.assertEquals(expectedList, after);
     }
 
 

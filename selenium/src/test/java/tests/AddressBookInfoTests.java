@@ -29,25 +29,30 @@ public class AddressBookInfoTests extends BaseTest {
         List<ContactData> contacts = appManager.getHbm().getContactList();
         ContactData randomContact = contacts.get(new Random().nextInt(contacts.size()));
 
-        String expected =
-                appManager.getContact().getPhones(randomContact) + "\n" +
-                appManager.getContact().getEmails(randomContact) + "\n" +
-                appManager.getContact().getAddress(randomContact);
-
-        appManager.getContact().clickEditContract(randomContact);
-        String actual = Stream.of
-                        (appManager.getContact().getValueFromName("home"),
-                                appManager.getContact().getValueFromName("mobile"),
-                                appManager.getContact().getValueFromName("work"),
-                                appManager.getContact().getValueFromName("email"),
-                                appManager.getContact().getValueFromName("email2"),
-                                appManager.getContact().getValueFromName("email3"),
-                                appManager.getContact().getValueFromName("address"))
+        String expectedValue = Stream.of
+                        (appManager.getContact().getPhones(randomContact),
+                        appManager.getContact().getEmails(randomContact),
+                        appManager.getContact().getAddress(randomContact))
                 .filter(Objects::nonNull)
                 .filter(e -> !e.equals(""))
                 .collect(Collectors.joining("\n"));
+
+        appManager.getContact().clickEditContract(randomContact);
+
+        String actualValue = Stream.of
+                        (appManager.getContact().getValueFromName("home"),
+                        appManager.getContact().getValueFromName("mobile"),
+                        appManager.getContact().getValueFromName("work"),
+                        appManager.getContact().getValueFromName("email"),
+                        appManager.getContact().getValueFromName("email2"),
+                        appManager.getContact().getValueFromName("email3"),
+                        appManager.getContact().getValueFromName("address"))
+                .filter(Objects::nonNull)
+                .filter(e -> !e.equals(""))
+                .collect(Collectors.joining("\n"));
+        Assertions.assertEquals(expectedValue, actualValue);
+
         appManager.getContact().openHomePage();
-        Assertions.assertEquals(expected, actual);
     }
 
     @Test

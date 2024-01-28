@@ -110,4 +110,8 @@ public class HibernateHelper extends HelperBase {
                 .get(GroupDto.class, group.getId()).getContacts())));
     }
 
+    public List<GroupData> getGroupsInContacts(ContactData contact) {
+        return (sessionFactory.fromSession(session -> convertGroupList(session
+                .get(ContactDto.class, contact.getId()).getGroups())));
+    }
 }
