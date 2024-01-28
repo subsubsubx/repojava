@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
+
+import static java.util.stream.Stream.generate;
 
 public class BaseTest {
 
@@ -66,39 +69,38 @@ public class BaseTest {
     }
 
 
-    public static List<GroupData> negativeGroupsProvider() {
-        return new ArrayList<GroupData>(List.of(new GroupData()
+    public static Stream<GroupData> negativeGroupsProvider() {
+        return Stream.generate(() -> new GroupData()
                 .withName("some name'")
                 .withHeader("some header")
-                .withFooter("some footer")));
+                .withFooter("some footer")).limit(1);
+
     }
 
     public static List<ContactData> contactsProvider() throws IOException {
-        List<ContactData> res = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
-            res.add(new ContactData()
-                    .withFirstname(Common.randomString(i + 10))
-                    .withLastname(Common.randomString(i + 11))
-                    .withMiddlename(Common.randomString(i + 12))
-                    .withNickname(Common.randomString(i + 13))
-                    .withTitle(Common.randomString(i + 14))
-                    .withCompany(Common.randomString(i + 15))
-                    .withAddress(Common.randomString(i + 16))
-                    .withHome(Common.randomString(i + 17))
-                    .withMobile(Common.randomString(i + 18))
-                    .withWork(Common.randomString(i + 19))
-                    .withEmail(Common.randomString(i + 20))
-                    .withFax(Common.randomString(i + 21))
-                    .withEmail2(Common.randomString(i + 22))
-                    .withEmail3(Common.randomString(i + 23))
-                    .withHomepage(Common.randomString(i + 24))
-                    .withBday("11")
-                    .withBmonth("January")
-                    .withByear("2000")
-                    .withAday("21")
-                    .withAmonth("May")
-                    .withAyear("1993"));
-        }
+        Stream<ContactData> stream = generate(() -> new ContactData()
+                .withFirstname(Common.randomString(10))
+                .withLastname(Common.randomString(11))
+                .withMiddlename(Common.randomString(12))
+                .withNickname(Common.randomString(13))
+                .withTitle(Common.randomString(14))
+                .withCompany(Common.randomString(15))
+                .withAddress(Common.randomString(16))
+                .withHome(Common.randomString(17))
+                .withMobile(Common.randomString(18))
+                .withWork(Common.randomString(19))
+                .withEmail(Common.randomString(20))
+                .withFax(Common.randomString(21))
+                .withEmail2(Common.randomString(22))
+                .withEmail3(Common.randomString(23))
+                .withHomepage(Common.randomString(24))
+                .withBday("11")
+                .withBmonth("January")
+                .withByear("2000")
+                .withAday("21")
+                .withAmonth("May")
+                .withAyear("1993")).limit(2);
+        List <ContactData> res = new ArrayList<>(stream.toList());
 
         StringBuilder json = new StringBuilder();
         try (FileReader fr = new FileReader("tmp/contacts.json");

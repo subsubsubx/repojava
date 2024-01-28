@@ -10,10 +10,9 @@ import model.GroupData;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static common.Common.randomString;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Generator {
 
@@ -65,24 +64,23 @@ public class Generator {
         } else throw new IllegalArgumentException("Unknown type " + type);
     }
 
-    private Object generateGroups() throws IOException {
-        List<GroupData> list = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            list.add(new GroupData()
-                    .withName(randomString(i * 10))
-                    .withHeader(randomString(i * 9))
-                    .withFooter(randomString(i * 8)));
-        }
-        return list;
+    private Object generateData(Supplier<Object> supplier) {
+        return Stream.generate(supplier).limit(count).collect(Collectors.toList());
     }
 
+    private Object generateGroups() throws IOException {
+        return generateData(() -> new GroupData()
+                .withName(Common.randomString(5))
+                .withHeader(Common.randomString(5))
+                .withFooter(Common.randomString(5)));
+
+    }
+
+
     private Object generateContacts() {
-        List<ContactData> list = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            list.add(new ContactData()
-                    .withFirstname(Common.randomString(i * 5))
-                    .withLastname(Common.randomString(i * 5)));
-        }
-        return list;
+        return generateData(() -> new ContactData()
+                .withFirstname(Common.randomString(5))
+                .withLastname(Common.randomString(5)));
+
     }
 }

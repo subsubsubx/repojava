@@ -4,14 +4,14 @@ import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroupHelper extends HelperBase {
 
     public GroupHelper(AppManager appManager) {
         super(appManager);
-     //   this.appManager = appManager;
+        //   this.appManager = appManager;
     }
 
     public void createGroup(GroupData groupData) {
@@ -74,17 +74,18 @@ public class GroupHelper extends HelperBase {
         return getOptionsList().size();
     }
 
-    public ArrayList<GroupData> getGroupList() {
+    public List<GroupData> getGroupList() {
         openGroupsPage();
-        ArrayList<GroupData> res = new ArrayList<>();
-        List<WebElement> list = getList(By.cssSelector("span.group"));
-        for (WebElement element : list) {
-            String s = element.getText();
-            WebElement checkbox = element.findElement(By.name("selected[]"));
-            String id = checkbox.getAttribute("value");
-            res.add(new GroupData().withId(id).withName(s));
-        }
-        return res;
+        return getList(By
+                .cssSelector("span.group"))
+                .stream()
+                .map(e -> {
+                    String s = e.getText();
+                    WebElement checkbox = e.findElement(By.name("selected[]"));
+                    String id = checkbox.getAttribute("value");
+                    return new GroupData().withId(id).withName(s);
+                })
+                .collect(Collectors.toList());
     }
 
     public void selectGroup(GroupData groupData) {

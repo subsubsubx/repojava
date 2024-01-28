@@ -63,13 +63,12 @@ public class AddressBookRemoveTests extends BaseTest {
 
         long rnd = new Random().nextLong(appManager.getHbm().getContactCount());
         ContactData randomContact = appManager.getHbm().getContactList().get((int) rnd);
-        GroupData randomGroup = new GroupData().withName("Hello World");
-        for (int i = 0; i < appManager.getHbm().getGroupCount(); i++) {
-            if (!appManager.getHbm().getGroupList().get(i).getName().equals("")) {
-                randomGroup = appManager.getHbm().getGroupList().get(i);
-                break;
-            }
-        }
+
+        GroupData randomGroup = appManager.getHbm().getGroupList().stream()
+                .filter(group -> !group.getName().equals(""))
+                .findFirst().get();
+
+
         appManager.getContact().addContactToGroup(randomContact, randomGroup);
 
         List<ContactData> before = appManager.getHbm().getContactsInGroup(randomGroup);
@@ -97,7 +96,5 @@ public class AddressBookRemoveTests extends BaseTest {
         expectedList.remove(index);
         Assertions.assertEquals(expectedList, newList);
     }
-
-
 }
 

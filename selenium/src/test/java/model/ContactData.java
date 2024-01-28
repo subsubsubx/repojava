@@ -284,6 +284,8 @@ public class ContactData {
     }
 
     public String toString() {
-        return "ContactData [id - " + id + ", name - " + firstname + ", middlename - " + middlename +   ", lastname - " +  lastname +"]";
+        return "ContactData [id - " + id + ", name - " + firstname + ", middlename - " + middlename + ", lastname - "
+                + lastname + ", home - " + home + ", mobile - " + mobile + ", work - " + work + ", fax - " + fax +
+               ", address - " + address + ", email1 - " + email + ", email2 - " + email2 + ", email3 - " + email3 + "]";
     }
 }

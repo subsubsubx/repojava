@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ContactHelper extends HelperBase {
 
@@ -78,10 +80,12 @@ public class ContactHelper extends HelperBase {
         clearSetField(By.name("middlename"), contact.getMiddlename());
         clearSetField(By.name("lastname"), contact.getLastname());
         clearSetField(By.name("nickname"), contact.getNickname());
+        clearSetField(By.name("company"), contact.getCompany());
         if (contact.getPhoto() != null) {
             attachFile(By.name("photo"), contact.getPhoto());
         }
         clearSetField(By.name("title"), contact.getTitle());
+        clearSetField(By.name("address"), contact.getAddress());
         clearSetField(By.name("home"), contact.getHome());
         clearSetField(By.name("mobile"), contact.getMobile());
         clearSetField(By.name("work"), contact.getWork());
@@ -113,8 +117,6 @@ public class ContactHelper extends HelperBase {
     }
 
 
-
-
     public void selectCheckboxContact(ContactData contactData) {
         clickElement(By.cssSelector(String.format("input[value='%s']", contactData.getId())));
     }
@@ -126,7 +128,7 @@ public class ContactHelper extends HelperBase {
         submitAndReturn(By.name("update"));
     }
 
-    private void clickEditContract(ContactData contactData) {
+    public void clickEditContract(ContactData contactData) {
         clickElement(By.xpath("//a[contains(@href, 'edit.php?id=" + contactData.getId() + "')]"));
 
     }
@@ -177,6 +179,29 @@ public class ContactHelper extends HelperBase {
     }
 
 
+    public String getPhones(ContactData contact) {
+        return appManager.getDriver().findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[6]", contact.getId()))).getText();
+    }
+
+    public String getEmails(ContactData contact) {
+        List<WebElement> elements = appManager.getDriver().findElements(By.xpath(
+                String.format("//input[@id='%s']/../../td[5]//a", contact.getId())));
+        return elements.stream()
+                .filter(Objects::nonNull)
+                .map(WebElement::getText)
+                .filter(e -> !e.equals(""))
+                .collect(Collectors.joining("\n"));
+    }
+    
+    public String getValueFromName(String name) {
+        return appManager.getDriver().findElement(By.name(name)).getAttribute("value");
+    }
+
+    public String getAddress(ContactData contact) {
+        return appManager.getDriver()
+                .findElement(By.xpath(String.format("//input[@id='%s']/../../td[4]", contact.getId()))).getText();
+    }
 }
 
 

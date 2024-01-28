@@ -15,9 +15,7 @@ public class HelperBase {
     }
 
     protected void clickAllElements(List<WebElement> list) {
-        for (WebElement element : list) {
-            element.click();
-        }
+        list.forEach(WebElement::click);
     }
 
     protected boolean isElementPresent(By by) {
@@ -63,6 +61,7 @@ public class HelperBase {
     protected void attachFile(By by, String s){
         appManager.getDriver().findElement(by).sendKeys(Paths.get(s).toAbsolutePath().toString());
     }
+
 
     public List<WebElement> getOptionsList() {
         return getList(By.name("selected[]"));

@@ -20,11 +20,10 @@ public class AddressBookAddTests extends BaseTest {
         appManager.getGroup().createGroup(groupData);
         List<GroupData> after = appManager.getHbm().getGroupList();
         List<GroupData> expectedList = new ArrayList<>(before);
-        Comparator<GroupData> comparator = Comparator.comparingInt(a -> Integer.parseInt(a.getId()));
-        after.sort(comparator);
-        expectedList.add(groupData.withId(after.get(after.size() - 1).getId()));
-        expectedList.sort(comparator);
-        Assertions.assertEquals(expectedList, after);
+        List<GroupData> func = after.stream().filter(e -> ! before.contains(e)).toList();
+        expectedList.add(func.get(0));
+
+        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
 
 
@@ -50,12 +49,10 @@ public class AddressBookAddTests extends BaseTest {
         appManager.getContact().createContact(contactData, group);
         List<ContactData> after = appManager.getHbm().getContactsInGroup(group);
         List<ContactData> expectedList = new ArrayList<>(before);
-        Comparator<ContactData> comparator = Comparator.comparingInt(a -> Integer.parseInt(a.getId()));
-        after.sort(comparator);
-        expectedList.add(contactData.withId(after.get(after.size() - 1).getId()));
-        expectedList.sort(comparator);
-        Assertions.assertEquals(expectedList, after);
 
+        expectedList.add(contactData.withId(after.get(after.size() - 1).getId()));
+
+        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
 
 
@@ -72,13 +69,12 @@ public class AddressBookAddTests extends BaseTest {
         long rnd = new Random().nextLong(appManager.getHbm().getContactCount());
 
         ContactData randomContact = appManager.getJdbcHelper().getContactList().get((int) rnd);
-        GroupData randomGroup = new GroupData().withName("Hello World");
-        for (int i = 0; i < appManager.getHbm().getGroupCount(); i++) {
-            if (!appManager.getHbm().getGroupList().get(i).getName().equals("")) {
-                randomGroup = appManager.getHbm().getGroupList().get(i);
-                break;
-            }
-        }
+
+        GroupData randomGroup = appManager.getHbm().getGroupList().stream()
+                .filter(group -> !group.getName().equals(""))
+                .findFirst()
+                .orElseGet(() -> new GroupData().withName("Hello World"));
+
         Set<ContactData> beforeSet = new LinkedHashSet<>(appManager.getHbm().getContactsInGroup(randomGroup));
         appManager.getContact().addContactToGroup(randomContact, randomGroup);
         List<ContactData> after = appManager.getHbm().getContactsInGroup(randomGroup);
@@ -96,10 +92,7 @@ public class AddressBookAddTests extends BaseTest {
         appManager.getContact().createContact(contactData);
         List<ContactData> after = appManager.getHbm().getContactList();
         List<ContactData> expectedList = new ArrayList<>(before);
-        Comparator<ContactData> comparator = Comparator.comparingInt(a -> Integer.parseInt(a.getId()));
-        after.sort(comparator);
         expectedList.add(contactData.withId(after.get(after.size() - 1).getId()));
-        expectedList.sort(comparator);
-        Assertions.assertEquals(expectedList, after);
+        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
 }

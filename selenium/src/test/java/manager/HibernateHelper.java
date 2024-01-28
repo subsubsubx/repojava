@@ -8,8 +8,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HibernateHelper extends HelperBase {
 
@@ -28,15 +28,20 @@ public class HibernateHelper extends HelperBase {
     }
 
 
-
-
-
     private static GroupData convert(GroupDto e) {
         return new GroupData(String.valueOf(e.getId()), e.getName(), e.getHeader(), e.getFooter());
     }
 
     private static ContactData convert(ContactDto e) {
-        return new ContactData().withId(String.valueOf(e.getId())).withFirstname(e.getFirstname()).withMiddlename(e.getMiddlename()).withLastname(e.getLastname());
+        return new ContactData().withId(
+                        String.valueOf(e.getId()))
+                .withFirstname(e.getFirstname())
+                .withMiddlename(e.getMiddlename())
+                .withLastname(e.getLastname())
+                .withHome(e.getHome())
+                .withMobile(e.getMobile())
+                .withWork(e.getWork())
+                .withFax(e.getFax());
     }
 
     private static GroupDto convert(GroupData group) {
@@ -52,38 +57,32 @@ public class HibernateHelper extends HelperBase {
         if (id.equals("")) {
             id = "0";
         }
-        return new ContactDto(Integer.parseInt(id), contact.getFirstname(), contact.getMiddlename(), contact.getLastname());
+        return new ContactDto(Integer.parseInt(id),
+                contact.getFirstname(), contact.getMiddlename(), contact.getLastname(),
+                contact.getHome(), contact.getMobile(), contact.getWork(), contact.getFax(), contact.getAddress(),
+                contact.getEmail(), contact.getEmail2(), contact.getEmail3());
     }
 
     private static List<GroupData> convertGroupList(List<GroupDto> dto) {
-        List<GroupData> res = new ArrayList<>();
-        for (GroupDto e : dto) {
-            res.add(convert(e));
-        }
-        return res;
+        return dto.stream().map(HibernateHelper::convert).collect(Collectors.toList());
     }
 
     private static List<ContactData> convertContactList(List<ContactDto> dto) {
-        List<ContactData> res = new ArrayList<>();
-        for (ContactDto e : dto) {
-            res.add(convert(e));
-        }
-        return res;
+        return dto.stream().map(HibernateHelper::convert).collect(Collectors.toList());
     }
 
 
-
     public List<GroupData> getGroupList() {
-        return convertGroupList(sessionFactory.fromSession(session -> {
-            return session.createQuery("from GroupDto", GroupDto.class).list();
-        }));
+        return convertGroupList(sessionFactory
+                .fromSession(session -> session
+                        .createQuery("from GroupDto", GroupDto.class).list()));
     }
 
 
     public long getGroupCount() {
-        return sessionFactory.fromSession(session -> {
-            return session.createQuery("select count (*) from GroupDto", Long.class).getSingleResult();
-        });
+        return sessionFactory
+                .fromSession(session -> session
+                        .createQuery("select count (*) from GroupDto", Long.class).getSingleResult());
     }
 
 
@@ -97,21 +96,18 @@ public class HibernateHelper extends HelperBase {
 
 
     public long getContactCount() {
-        return sessionFactory.fromSession(session -> {
-            return session.createQuery("select count (*) from ContactDto", Long.class).getSingleResult();
-        });
+        return sessionFactory.fromSession(session -> session
+                .createQuery("select count (*) from ContactDto", Long.class).getSingleResult());
     }
 
     public List<ContactData> getContactList() {
-        return convertContactList(sessionFactory.fromSession(session -> {
-            return session.createQuery("from ContactDto", ContactDto.class).list();
-        }));
+        return convertContactList(sessionFactory.fromSession(session -> session
+                .createQuery("from ContactDto", ContactDto.class).list()));
     }
 
     public List<ContactData> getContactsInGroup(GroupData group) {
-       return (sessionFactory.fromSession(session -> {
-         return convertContactList(session.get(GroupDto.class, group.getId()).getContacts());
-        }));
+        return (sessionFactory.fromSession(session -> convertContactList(session
+                .get(GroupDto.class, group.getId()).getContacts())));
     }
 
 }
