@@ -90,7 +90,7 @@ public class AddressBookAddTests extends BaseTest {
             before = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact.get()));
             appManager.getContact().addContactToGroup(validContact.get(), randomGroup.get());
             // Без явного ожидания тест падает, тк данные не успевают загрузиться в бд
-            try {
+           try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
