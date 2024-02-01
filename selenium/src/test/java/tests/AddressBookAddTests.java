@@ -62,6 +62,7 @@ public class AddressBookAddTests extends BaseTest {
     @Test
     void addContactToGroup() {
         List<GroupData> before;
+        List<GroupData> after;
         Optional<GroupData> randomGroup = appManager.getHbm().getGroupList()
                 .stream()
                 .filter(group -> !group.getName().equals(""))
@@ -78,7 +79,6 @@ public class AddressBookAddTests extends BaseTest {
                 .filter(e -> appManager.getHbm().getGroupsInContacts(e).size() == 0)
                 .findFirst();
         if (validContact.isEmpty()) {
-            before = null;
             appManager.getContact().createContact(new ContactData()
                     .withFirstname(Common.randomString(15))
                     .withLastname(Common.randomString(10))
@@ -86,6 +86,8 @@ public class AddressBookAddTests extends BaseTest {
             validContact = appManager.getHbm().getContactList().stream()
                     .filter(e -> appManager.getHbm().getGroupsInContacts(e).size() == 0)
                     .findFirst();
+            before = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact.get()));
+            appManager.getContact().addContactToGroup(validContact.get(), randomGroup.get());
         } else {
             before = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact.get()));
             appManager.getContact().addContactToGroup(validContact.get(), randomGroup.get());
@@ -96,7 +98,7 @@ public class AddressBookAddTests extends BaseTest {
                 throw new RuntimeException(e);
             }
         }
-        List<GroupData> after = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact.get()));
+        after = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact.get()));
         List<GroupData> expectedList = new ArrayList<>();
         List<GroupData> func = after.stream().filter(e -> !before.contains(e)).toList();
         expectedList.add(func.get(0));
