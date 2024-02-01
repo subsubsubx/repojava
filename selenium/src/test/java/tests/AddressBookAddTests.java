@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static common.Common.randomString;
+
 public class AddressBookAddTests extends BaseTest {
 
 
@@ -112,7 +114,10 @@ public class AddressBookAddTests extends BaseTest {
                 .filter(group -> !group.getName().equals(""))
                 .findFirst()
                 .orElseGet(() -> {
-                    appManager.getHbm().createGroup(new GroupData("", "qwe", "asd", "zxc"));
+                    appManager.getHbm().createGroup(new GroupData("",
+                            randomString(3),
+                            randomString(4),
+                            randomString(5)));
                     return appManager.getHbm().getGroupList()
                             .stream()
                             .filter(group -> !group.getName().equals(""))
@@ -126,8 +131,8 @@ public class AddressBookAddTests extends BaseTest {
                 .findFirst()
                 .orElseGet(() -> {
                     ContactData newContact = new ContactData()
-                            .withFirstname(Common.randomString(15))
-                            .withLastname(Common.randomString(10))
+                            .withFirstname(randomString(15))
+                            .withLastname(randomString(10))
                             .withPhoto(Common.getRandomFile("src/test/resources/img"));
                     appManager.getContact().createContact(newContact);
                     return appManager.getHbm().getContactList()
@@ -139,17 +144,16 @@ public class AddressBookAddTests extends BaseTest {
         List<GroupData> before = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact));
         appManager.getContact().addContactToGroup(validContact, randomGroup);
 
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         List<GroupData> after = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact));
         List<GroupData> expectedList = after.stream().filter(e -> !before.contains(e)).toList();
         Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
-
 
 
     @ParameterizedTest
