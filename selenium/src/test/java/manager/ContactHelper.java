@@ -118,7 +118,7 @@ public class ContactHelper extends HelperBase {
 
 
     public void selectCheckboxContact(ContactData contactData) {
-        clickElement(By.cssSelector(String.format("input[value='%s']", contactData.getId())));
+        clickElement(By.xpath(String.format("//input[@type ='checkbox'][@value='%s']", contactData.getId())));
     }
 
     public void modifyContact(ContactData contactData, ContactData modify) {

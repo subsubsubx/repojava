@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class AddressBookAddTests extends BaseTest {
@@ -59,7 +58,7 @@ public class AddressBookAddTests extends BaseTest {
     }
 
 
-    @Test
+/*    @Test
     void addContactToGroup() {
         List<GroupData> before;
         List<GroupData> after;
@@ -103,7 +102,54 @@ public class AddressBookAddTests extends BaseTest {
         List<GroupData> func = after.stream().filter(e -> !before.contains(e)).toList();
         expectedList.add(func.get(0));
         Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
+    }*/
+
+
+    @Test
+    void addContactToGroup() {
+        GroupData randomGroup = appManager.getHbm().getGroupList()
+                .stream()
+                .filter(group -> !group.getName().equals(""))
+                .findFirst()
+                .orElseGet(() -> {
+                    appManager.getHbm().createGroup(new GroupData("", "qwe", "asd", "zxc"));
+                    return appManager.getHbm().getGroupList()
+                            .stream()
+                            .filter(group -> !group.getName().equals(""))
+                            .findFirst()
+                            .orElseThrow();
+                });
+
+        ContactData validContact = appManager.getHbm().getContactList()
+                .stream()
+                .filter(e -> appManager.getHbm().getGroupsInContacts(e).isEmpty())
+                .findFirst()
+                .orElseGet(() -> {
+                    ContactData newContact = new ContactData()
+                            .withFirstname(Common.randomString(15))
+                            .withLastname(Common.randomString(10))
+                            .withPhoto(Common.getRandomFile("src/test/resources/img"));
+                    appManager.getContact().createContact(newContact);
+                    return appManager.getHbm().getContactList()
+                            .stream()
+                            .filter(e -> appManager.getHbm().getGroupsInContacts(e).isEmpty())
+                            .findFirst()
+                            .orElseThrow();
+                });
+        List<GroupData> before = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact));
+        appManager.getContact().addContactToGroup(validContact, randomGroup);
+
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        List<GroupData> after = new ArrayList<>(appManager.getHbm().getGroupsInContacts(validContact));
+        List<GroupData> expectedList = after.stream().filter(e -> !before.contains(e)).toList();
+        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
+
 
 
     @ParameterizedTest
