@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static common.Common.randomString;
 import static java.util.stream.Stream.generate;
 
 public class BaseTest {
@@ -100,7 +102,7 @@ public class BaseTest {
                 .withAday("21")
                 .withAmonth("May")
                 .withAyear("1993")).limit(2);
-        List <ContactData> res = new ArrayList<>(stream.toList());
+        List<ContactData> res = new ArrayList<>(stream.toList());
 
         StringBuilder json = new StringBuilder();
         try (FileReader fr = new FileReader("tmp/contacts.json");
@@ -124,6 +126,50 @@ public class BaseTest {
                     */
         res.addAll(mapperList);
         return res;
+    }
+
+    protected void createSingleGroup() {
+        appManager.getHbm().createGroup(new GroupData("",
+                randomString(3),
+                randomString(4),
+                randomString(5)));
+    }
+
+    protected void createSingleContact() {
+        appManager.getContact().createContact(new ContactData()
+                .withFirstname(randomString(15))
+                .withLastname(randomString(10))
+                .withPhoto(Common.getRandomFile("src/test/resources/img")));
+    }
+
+    protected List<ContactData> getValidContactsWithoutGroups() {
+        List<ContactData> res = appManager.getHbm().getContacts();
+        res.removeIf(groupHasContact());
+        if (res.size() == 0) {
+            createSingleContact();
+            res = appManager.getHbm().getContacts();
+        }
+        return res;
+    }
+
+
+    protected List<GroupData> getValidGroups() {
+        List<GroupData> res = appManager.getHbm().getGroups();
+        res.removeIf(groupNameIsEmpty());
+        if (res.size() == 0) {
+            createSingleGroup();
+            res = appManager.getHbm().getGroups();
+        }
+        return res;
+    }
+
+
+    protected Predicate<GroupData> groupNameIsEmpty() {
+        return group -> "".equals(group.getName());
+    }
+
+    protected Predicate<ContactData> groupHasContact() {
+        return e -> !appManager.getHbm().getGroupsInContacts(e).isEmpty();
     }
 
     @AfterEach

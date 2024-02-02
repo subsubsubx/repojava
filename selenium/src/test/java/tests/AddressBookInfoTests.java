@@ -15,7 +15,7 @@ public class AddressBookInfoTests extends BaseTest {
 
     @Test
     void testContactData() {
-        if (appManager.getHbm().getContactCount() == 0) {
+        if (appManager.getHbm().getContactsCount() == 0) {
             appManager.getContact().createContact(new ContactData()
                     .withFirstname("TestAll")
                     .withHome("")
@@ -26,7 +26,7 @@ public class AddressBookInfoTests extends BaseTest {
                     .withEmail2("")
                     .withEmail3("hello@world.com"));
         }
-        List<ContactData> contacts = appManager.getHbm().getContactList();
+        List<ContactData> contacts = appManager.getHbm().getContacts();
         ContactData randomContact = contacts.get(new Random().nextInt(contacts.size()));
 
         String expectedValue = Stream.of
@@ -57,7 +57,7 @@ public class AddressBookInfoTests extends BaseTest {
 
     @Test
     void testPhoneUi() {
-        if (appManager.getHbm().getContactCount() == 0) {
+        if (appManager.getHbm().getContactsCount() == 0) {
             appManager.getContact().createContact(new ContactData()
                     .withFirstname("TestPhone")
                     .withHome("")
@@ -65,7 +65,7 @@ public class AddressBookInfoTests extends BaseTest {
                     .withWork(""));
         }
 
-        List<ContactData> contacts = appManager.getHbm().getContactList();
+        List<ContactData> contacts = appManager.getHbm().getContacts();
         ContactData randomContact = contacts.get(new Random().nextInt(contacts.size()));
         String expected = appManager.getContact().getPhones(randomContact);
         appManager.getContact().clickEditContract(randomContact);
@@ -83,14 +83,14 @@ public class AddressBookInfoTests extends BaseTest {
 
     @Test
     void testEmailUi() {
-        if (appManager.getHbm().getContactCount() == 0) {
+        if (appManager.getHbm().getContactsCount() == 0) {
             appManager.getContact().createContact(new ContactData()
                     .withFirstname("TestEmail")
                     .withEmail("")
                     .withEmail2("")
                     .withEmail3("hello@world.com"));
         }
-        List<ContactData> contacts = appManager.getHbm().getContactList();
+        List<ContactData> contacts = appManager.getHbm().getContacts();
         ContactData randomContact = contacts.get(new Random().nextInt(contacts.size()));
         String expected = appManager.getContact().getEmails(randomContact);
         appManager.getContact().clickEditContract(randomContact);
@@ -107,12 +107,12 @@ public class AddressBookInfoTests extends BaseTest {
 
     @Test
     void testAddressUi() {
-        if (appManager.getHbm().getContactCount() == 0) {
+        if (appManager.getHbm().getContactsCount() == 0) {
             appManager.getContact().createContact(new ContactData()
                     .withFirstname("TestAddress")
                     .withAddress("Улица пушкина дом колотушкина"));
         }
-        List<ContactData> contacts = appManager.getHbm().getContactList();
+        List<ContactData> contacts = appManager.getHbm().getContacts();
         ContactData randomContact = contacts.get(new Random().nextInt(contacts.size()));
         String expected = appManager.getContact().getAddress(randomContact);
         appManager.getContact().clickEditContract(randomContact);

@@ -59,11 +59,11 @@ public class ContactHelper extends HelperBase {
     }
 
     public void addContactToGroup(ContactData contact, GroupData group) {
-        openHomePage();
-        selectCheckboxContact(contact);
-        new Select(appManager.getDriver().findElement(By.name("to_group"))).selectByValue(group.getId());
-        clickElement(By.name("add"));
-        clickElement(By.partialLinkText("group page"));
+            openHomePage();
+            selectCheckboxContact(contact);
+            new Select(appManager.getDriver().findElement(By.name("to_group"))).selectByValue(group.getId());
+            clickElement(By.name("add"));
+            clickElement(By.partialLinkText("group page"));
     }
 
     public void deleteContactFromGroup(ContactData contact, GroupData groupData) {
