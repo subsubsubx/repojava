@@ -150,7 +150,7 @@ public class BaseTest {
             createSingleContact();
             try {
                 // На случай если запись не успеет сохраниться в базу
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -159,7 +159,7 @@ public class BaseTest {
         }
         return res;
     }
-//
+
 
     protected List<GroupData> getValidGroups() {
         List<GroupData> res = appManager.getHbm().getGroups();
@@ -168,7 +168,7 @@ public class BaseTest {
             createSingleGroup();
             try {
                 // На случай если запись не успеет сохраниться в базу
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
