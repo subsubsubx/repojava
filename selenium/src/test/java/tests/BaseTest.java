@@ -142,23 +142,38 @@ public class BaseTest {
                 .withPhoto(Common.getRandomFile("src/test/resources/img")));
     }
 
+
     protected List<ContactData> getValidContactsWithoutGroups() {
         List<ContactData> res = appManager.getHbm().getContacts();
         res.removeIf(groupHasContact());
         if (res.size() == 0) {
             createSingleContact();
+            try {
+                // На случай если запись не успеет сохраниться в базу
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             res = appManager.getHbm().getContacts();
+            res.removeIf(groupHasContact());
         }
         return res;
     }
-
+//
 
     protected List<GroupData> getValidGroups() {
         List<GroupData> res = appManager.getHbm().getGroups();
         res.removeIf(groupNameIsEmpty());
         if (res.size() == 0) {
             createSingleGroup();
+            try {
+                // На случай если запись не успеет сохраниться в базу
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             res = appManager.getHbm().getGroups();
+            res.removeIf(groupNameIsEmpty());
         }
         return res;
     }

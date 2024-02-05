@@ -92,60 +92,6 @@ public class AddressBookRemoveTests extends BaseTest {
     }
 
 
-  /*  @Test
-    void removeContactFromGroup() {
-        if (appManager.getHbm().getGroupsCount() == 0) {
-            appManager.getHbm().createGroup(new GroupData("", "qwe", "asd", "zxc"));
-        }
-        if (appManager.getHbm().getContactsCount() == 0) {
-            appManager.getContact().createContact(new ContactData()
-                    .withNickname("asd")
-                    .withPhoto(Common.getRandomFile("src/test/resources/img")));
-        }
-        List<ContactData> before;
-        List<ContactData> after;
-        Optional<GroupData> validGroup = appManager.getHbm().getGroups()
-                .stream()
-                .filter(group -> !group.getName().isEmpty() && appManager.getHbm().getContactsInGroup(group).size() > 0)
-                .findFirst();
-        if (validGroup.isEmpty()) {
-            GroupData rndGroup = appManager.getHbm().getGroups()
-                    .stream()
-                    .filter(group -> !group.getName().isEmpty())
-                    .findFirst()
-                    .orElseGet(() -> {
-                        appManager.getHbm().createGroup(new GroupData("", "qwe", "asd", "zxc"));
-                        return appManager.getHbm().getGroups().stream()
-                                .filter(group -> !group.getName().isEmpty())
-                                .findFirst()
-                                .orElseThrow();
-                    });
-            ContactData rndContact = appManager.getHbm().getContacts()
-                    .get(new Random().nextInt((int) appManager.getHbm().getContactsCount()));
-            appManager.getContact().addContactToGroup(rndContact, rndGroup);
-            before = new ArrayList<>(appManager.getHbm().getContactsInGroup(rndGroup));
-            appManager.getContact().deleteContactFromGroup(rndContact, rndGroup);
-            after = new ArrayList<>(appManager.getHbm().getContactsInGroup(rndGroup));
-        } else {
-            before = new ArrayList<>(appManager.getHbm().getContactsInGroup(validGroup.get()));
-            appManager.getContact().deleteContactFromGroup(
-                    appManager.getHbm().getContactsInGroup(validGroup.get()).get(0)
-                    , validGroup.get());
-            after = new ArrayList<>(appManager.getHbm().getContactsInGroup(validGroup.get()));
-        }
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        List<ContactData> expectedList = new ArrayList<>(before);
-        List<ContactData> func = after.stream().filter(before::contains).toList();
-
-        expectedList.remove(func.get(0));
-        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
-    }*/
-
-
     @Test
     void deleteContactTest() {
         if (appManager.getHbm().getContactsCount() == 0) {
