@@ -131,9 +131,13 @@ public class AddressBookAddTests extends BaseTest {
         List<GroupData> func = after.stream()
                 .filter(e -> !before.contains(e))
                 .toList();
-        expectedList.add(func.get(0));
-        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
 
+        try {
+            expectedList.add(func.get(0));
+        } catch (Exception e) {
+            Assertions.fail("corrupted data");
+        }
+        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
 
 

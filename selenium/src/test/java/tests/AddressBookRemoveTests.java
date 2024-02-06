@@ -87,7 +87,11 @@ public class AddressBookRemoveTests extends BaseTest {
         List<ContactData> func = before.stream()
                 .filter(e -> !after.contains(e))
                 .toList();
-        expectedList.remove(func.get(0));
+        try {
+            expectedList.remove(func.get(0));
+        } catch (Exception e) {
+            Assertions.fail("corrupted data");
+        }
         Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
 
