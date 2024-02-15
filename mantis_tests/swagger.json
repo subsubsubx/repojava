@@ -6,7 +6,8 @@
     "version": "1.1.1"
   },
   "schemes": [
-    "http", "https"
+    "http",
+    "https"
   ],
   "produces": [
     "application/json"
@@ -33,7 +34,9 @@
         "responses": {
           "200": {
             "description": "Success with issue details",
-            "schema": { "$ref": "#/definitions/CreateIssueResponse" }
+            "schema": {
+              "$ref": "#/definitions/CreateIssueResponse"
+            }
           },
           "403": {
             "description": "Access denied"
@@ -143,7 +146,9 @@
         "responses": {
           "200": {
             "description": "Success",
-            "schema": { "$ref": "#/definitions/ConfigGetResponse" }
+            "schema": {
+              "$ref": "#/definitions/ConfigGetResponse"
+            }
           },
           "403": {
             "description": "Access denied"
@@ -180,7 +185,9 @@
         "responses": {
           "200": {
             "description": "Success",
-            "schema": { "$ref": "#/definitions/LangGetResponse" }
+            "schema": {
+              "$ref": "#/definitions/LangGetResponse"
+            }
           },
           "403": {
             "description": "Access denied"
@@ -198,6 +205,12 @@
           "User"
         ],
         "operationId": "userAdd",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "body",
@@ -212,7 +225,9 @@
         "responses": {
           "201": {
             "description": "User successfully created",
-            "schema": { "$ref": "#/definitions/UserAddResponse" }
+            "schema": {
+              "$ref": "#/definitions/UserAddResponse"
+            }
           },
           "403": {
             "description": "Access denied"
@@ -267,7 +282,9 @@
         "responses": {
           "200": {
             "description": "Success",
-            "schema": { "$ref": "#/definitions/UserResponse" }
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
           },
           "403": {
             "description": "Access denied"
@@ -298,7 +315,9 @@
         "responses": {
           "200": {
             "description": "Success with project details",
-            "schema": { "$ref": "#/definitions/GetProjectResponse" }
+            "schema": {
+              "$ref": "#/definitions/GetProjectResponse"
+            }
           },
           "403": {
             "description": "Access denied"
@@ -311,7 +330,9 @@
     }
   },
   "security": [
-    { "Authorization": [] }
+    {
+      "Authorization": []
+    }
   ],
   "securityDefinitions": {
     "Authorization": {
@@ -323,7 +344,11 @@
   "definitions": {
     "Issue": {
       "type": "object",
-      "required": [ "project", "summary", "description" ],
+      "required": [
+        "project",
+        "summary",
+        "description"
+      ],
       "properties": {
         "id": {
           "type": "integer",
@@ -384,7 +409,10 @@
     },
     "UploadableFile": {
       "type": "object",
-      "required": ["name","content"],
+      "required": [
+        "name",
+        "content"
+      ],
       "properties": {
         "name": {
           "type": "string"
@@ -402,13 +430,15 @@
           "format": "int64"
         },
         "name": {
-          "type" : "string"
+          "type": "string"
         }
       }
     },
     "Project": {
       "type": "object",
-      "required": [ "name" ],
+      "required": [
+        "name"
+      ],
       "properties": {
         "id": {
           "type": "integer",
@@ -454,7 +484,11 @@
     },
     "CustomField": {
       "type": "object",
-      "required":  ["id","name","type"],
+      "required": [
+        "id",
+        "name",
+        "type"
+      ],
       "properties": {
         "id": {
           "type": "integer",
@@ -782,7 +816,7 @@
         }
       }
     },
-    "Category":{
+    "Category": {
       "type": "object",
       "properties": {
         "id": {

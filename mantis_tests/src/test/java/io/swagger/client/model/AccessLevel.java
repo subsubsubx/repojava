@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * AccessLevel
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2024-02-16T00:17:21.605+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2024-02-16T01:15:13.130+03:00")
 public class AccessLevel {
   @SerializedName("id")
   private Long id = null;

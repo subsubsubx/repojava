@@ -3,7 +3,6 @@ package mantis.tests;
 import mantis.common.Common;
 import mantis.model.CreateUserData;
 import mantis.model.DeveloperMailUserData;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -47,10 +46,14 @@ public class UserRegTests extends TestBase {
 
     @Test
     void createUser() throws IOException {
-        userData = app.getDeveloperMail().addUser();
-        String email = String.format("%s@developermail.com", userData.getName());
+        //     userData = app.getDeveloperMail().addUser();
+
+
+        String name = Common.randomString(10);
+        String email = String.format("%s@localhost", name);
         String password = Common.randomString(10);
 
+        userData = app.getJamesApiHelper().addUser(name, password);
         CreateUserData createUserData = new CreateUserData()
                 .withUsername(userData.getName())
                 .withRealName(userData.getName())
@@ -63,15 +66,15 @@ public class UserRegTests extends TestBase {
 
         app.getRestApiHelper().registerNewUser(createUserData);
 
-        String message = app.getDeveloperMail().receive(userData, Duration.ofSeconds(7));
-        String url = app.getDeveloperMail().extractUrl(userData);
+        app.getMailHelper().receive(email, password, Duration.ofSeconds(7));
+        String url = app.getMailHelper().extractUrl(email, password);
         app.getRegHelper().confirmRegistration(url, userData.getName(), password);
         app.getHttpClient().login(userData.getName(), password);
         Assertions.assertTrue(app.getHttpClient().isLoggedIn());
     }
-
-    @AfterEach
+}
+/*    @AfterEach
     void deleteMailUser() {
         app.getDeveloperMail().deleteUser(userData);
     }
-}
+}*/

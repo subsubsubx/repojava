@@ -14,12 +14,12 @@ public class DeveloperMailUserData {
     public DeveloperMailUserData() {
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public DeveloperMailUserData withName(String name) {
+        return new DeveloperMailUserData(name, this.token);
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public DeveloperMailUserData withToken(String token) {
+        return new DeveloperMailUserData(this.name, token);
     }
 
     public String getName() {

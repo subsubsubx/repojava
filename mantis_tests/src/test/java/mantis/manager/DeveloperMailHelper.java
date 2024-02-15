@@ -68,9 +68,7 @@ public class DeveloperMailHelper extends HelperBase {
         }
     }
 
-    public void registerNewUser(DeveloperMailUserData userData) {
 
-    }
 
     public String receive(DeveloperMailUserData userData, Duration duration) {
         long start = System.currentTimeMillis();

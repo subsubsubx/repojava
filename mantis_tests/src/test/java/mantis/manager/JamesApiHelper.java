@@ -1,5 +1,6 @@
 package mantis.manager;
 
+import mantis.model.DeveloperMailUserData;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -17,14 +18,16 @@ public class JamesApiHelper extends HelperBase {
                 .build();
     }
 
-    public void addUser(String email, String password) {
+    public DeveloperMailUserData addUser(String user, String password) {
         RequestBody body = RequestBody.create(String.format("{\"password\":\"%s\"}", password), JSON);
         Request request = new Request.Builder()
-                .url(String.format("%s/users/%s", appManager.getProperty("james.apiBaseUrl"), email))
+                .url(String.format("%s/users/%s@localhost", appManager.getProperty("james.apiBaseUrl"), user))
                 .put(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new RuntimeException("Unexpected code: " + response);
+            System.out.println(response.body().string());
+            return new  DeveloperMailUserData().withName(user);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

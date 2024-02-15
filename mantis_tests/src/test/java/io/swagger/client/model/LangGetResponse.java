@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * LangGetResponse
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2024-02-16T00:17:21.605+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2024-02-16T01:15:13.130+03:00")
 public class LangGetResponse {
   @SerializedName("language")
   private String language = null;
