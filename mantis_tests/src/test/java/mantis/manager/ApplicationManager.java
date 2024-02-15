@@ -7,16 +7,18 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.util.Properties;
 
 public class ApplicationManager {
-
-
     private MailHelper mailHelper;
     private WebDriver driver;
     private String browser;
     private SessionHelper session;
     private HttpSessionHelper httpSessionHelper;
+    private DeveloperMailHelper developerMailHelper;
     private JamesCliHelper jamesCliHelper;
     private RegistrationHelper regHelper;
+    private JamesApiHelper jamesApiHelper;
+    private RestApiHelper apiHelper;
     private Properties properties;
+
 
     public void init(String browser, Properties properties) {
         this.browser = browser;
@@ -48,6 +50,19 @@ public class ApplicationManager {
         return driver;
     }
 
+    public JamesApiHelper getJamesApiHelper() {
+        if (jamesApiHelper == null) {
+            jamesApiHelper = new JamesApiHelper(this);
+        }
+        return jamesApiHelper;
+    }
+
+    public DeveloperMailHelper getDeveloperMail() {
+        if (developerMailHelper == null) {
+            developerMailHelper = new DeveloperMailHelper(this);
+        }
+        return developerMailHelper;
+    }
 
     public JamesCliHelper getCliHelper() {
         if (jamesCliHelper == null) {
@@ -68,7 +83,12 @@ public class ApplicationManager {
         }
         return regHelper;
     }
-
+    public RestApiHelper getRestApiHelper() {
+        if (apiHelper == null) {
+            apiHelper = new RestApiHelper(this);
+        }
+        return apiHelper;
+    }
     public HttpSessionHelper getHttpClient() {
         if (httpSessionHelper == null) {
             httpSessionHelper = new HttpSessionHelper(this);
