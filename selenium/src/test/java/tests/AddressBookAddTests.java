@@ -25,8 +25,7 @@ public class AddressBookAddTests extends BaseTest {
         List<GroupData> expectedList = new ArrayList<>(before);
         List<GroupData> func = after.stream().filter(e -> !before.contains(e)).toList();
         expectedList.add(func.get(0));
-
-        Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
+       Assertions.assertEquals(Set.copyOf(expectedList), Set.copyOf(after));
     }
 
 

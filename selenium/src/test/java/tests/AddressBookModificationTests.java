@@ -1,6 +1,7 @@
 package tests;
 
 import common.Common;
+import io.qameta.allure.Allure;
 import model.ContactData;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
@@ -14,12 +15,15 @@ public class AddressBookModificationTests extends BaseTest {
 
     @Test
     void modifyGroupTest() {
-        if (appManager.getHbm().getGroupsCount() == 0) {
+        Allure.step("Precondition check", step -> {
+            if (appManager.getHbm().getGroupsCount() == 0) {
                 appManager.getHbm().createGroup(new GroupData()
                         .withName(Common.randomString(5))
                         .withHeader(Common.randomString(5))
                         .withFooter(Common.randomString(5)));
             }
+        });
+
         List<GroupData> before = appManager.getHbm().getGroups();
         int randomIndex = new Random().nextInt(before.size());
         GroupData randomGroup = new GroupData()
@@ -34,13 +38,15 @@ public class AddressBookModificationTests extends BaseTest {
 
     @Test
     void modifyContactTest() throws IOException {
-        if (appManager.getHbm().getContactsCount() == 0) {
-            for (int i = 0; i < 2; i++) {
-                appManager.getContact().createContact(new ContactData()
-                        .withFirstname(Common.randomString(5))
-                        .withLastname(Common.randomString(5)));
-            }
-        }
+        Allure.step("Precondition check", step -> {
+                    if (appManager.getHbm().getContactsCount() == 0) {
+                        for (int i = 0; i < 2; i++) {
+                            appManager.getContact().createContact(new ContactData()
+                                    .withFirstname(Common.randomString(5))
+                                    .withLastname(Common.randomString(5)));
+                        }
+                    }
+                });
         List<ContactData> before = appManager.getHbm().getContacts();
         int randomIndex = new Random().nextInt(before.size());
         ContactData randomContact = contactsProvider().get(0)

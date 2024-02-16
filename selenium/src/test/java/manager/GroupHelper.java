@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,8 @@ public class GroupHelper extends HelperBase {
         //   this.appManager = appManager;
     }
 
+
+    @Step(value = "Создание группы")
     public void createGroup(GroupData groupData) {
         openGroupsPage();
         clickElement(By.name("new"));
@@ -22,6 +25,8 @@ public class GroupHelper extends HelperBase {
     }
 
 
+
+    @Step(value = "Удаление всех групп")
     public void deleteAllGroups() {
         openGroupsPage();
         clickAllElements(getOptionsList());
@@ -29,6 +34,8 @@ public class GroupHelper extends HelperBase {
     }
 
 
+
+    @Step(value = "Удаление группы")
     public void deleteGroup(GroupData groupData) {
         openGroupsPage();
         selectGroup(groupData);
@@ -36,6 +43,7 @@ public class GroupHelper extends HelperBase {
     }
 
 
+    @Step(value = "Модификация группы")
     public void modifyGroup(GroupData oldGroup, GroupData newGroup) {
         openGroupsPage();
         selectGroup(oldGroup);
@@ -44,6 +52,8 @@ public class GroupHelper extends HelperBase {
         fillDataFields(newGroup);
         submitAndReturn(By.name("update"));
     }
+
+
 
 
     public void openGroupsPage() {
@@ -58,12 +68,15 @@ public class GroupHelper extends HelperBase {
         clickElement(By.name("group_footer")).clear();
     }
 
+
     private void fillDataFields(GroupData groupData) {
         setField(By.name("group_name"), groupData.getName());
         setField(By.name("group_header"), groupData.getHeader());
         setField(By.name("group_footer"), groupData.getFooter());
     }
 
+
+    @Step(value = "Подтверждение и возврат")
     private void submitAndReturn(By by) {
         clickElement(by);
         clickElement(By.linkText("group page"));
@@ -74,6 +87,8 @@ public class GroupHelper extends HelperBase {
         return getOptionsList().size();
     }
 
+
+    @Step(value = "Получение списка групп")
     public List<GroupData> getGroupList() {
         openGroupsPage();
         return getList(By

@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import model.ContactData;
 import model.GroupData;
 import org.openqa.selenium.By;
@@ -20,15 +21,18 @@ public class ContactHelper extends HelperBase {
     }
 
 
+    @Step(value = "Открытие формы заполнения контакта")
     public void openAddNewContact() {
         clickElement(By.linkText("add new"));
     }
+
 
     public void openHomePage() {
         clickElement(By.linkText("home"));
     }
 
 
+    @Step(value = "Создание контакта")
     public void createContact(ContactData contact) {
         openAddNewContact();
         fillContactInputFields(contact);
@@ -41,6 +45,8 @@ public class ContactHelper extends HelperBase {
         submitAndReturn(By.name("submit"));
     }
 
+
+    @Step(value = "Создание контакта")
     public void createContact(ContactData contact, GroupData groupData) {
         openAddNewContact();
         fillContactInputFields(contact);
@@ -54,10 +60,14 @@ public class ContactHelper extends HelperBase {
         submitAndReturn(By.name("submit"));
     }
 
+
+
     private void selectGroup(GroupData groupData) {
         new Select(appManager.getDriver().findElement(By.name("new_group"))).selectByValue(groupData.getId());
     }
 
+
+    @Step(value = "Добавление контакта в группу")
     public void addContactToGroup(ContactData contact, GroupData group) {
             openHomePage();
             selectCheckboxContact(contact);
@@ -66,6 +76,8 @@ public class ContactHelper extends HelperBase {
             clickElement(By.partialLinkText("group page"));
     }
 
+
+    @Step(value = "Удаление контакта из группы")
     public void deleteContactFromGroup(ContactData contact, GroupData groupData) {
         openHomePage();
         new Select(appManager.getDriver().findElement(By.name("group"))).selectByValue(groupData.getId());
@@ -75,6 +87,8 @@ public class ContactHelper extends HelperBase {
         new Select(appManager.getDriver().findElement(By.name("group"))).selectByVisibleText("[all]");
     }
 
+
+    @Step(value = "Заполнение формы контакта данными")
     private void fillContactInputFields(ContactData contact) {
         clearSetField(By.name("firstname"), contact.getFirstname());
         clearSetField(By.name("middlename"), contact.getMiddlename());
@@ -97,6 +111,8 @@ public class ContactHelper extends HelperBase {
     }
 
 
+
+    @Step(value = "Удаление всех контактов")
     public void deleteAllContacts() {
         if (getContactCount() == 0) {
             createContact(new ContactData()
@@ -109,6 +125,8 @@ public class ContactHelper extends HelperBase {
         }
     }
 
+
+    @Step(value = "Удаление контакта")
     public void deleteContacts(ContactData contactData) {
         openHomePage();
         selectCheckboxContact(contactData);
@@ -121,12 +139,17 @@ public class ContactHelper extends HelperBase {
         clickElement(By.xpath(String.format("//input[@type ='checkbox'][@value='%s']", contactData.getId())));
     }
 
+
+
+    @Step(value = "Изменение контакта")
     public void modifyContact(ContactData contactData, ContactData modify) {
         openHomePage();
         clickEditContract(contactData);
         fillContactInputFields(modify);
         submitAndReturn(By.name("update"));
     }
+
+
 
     public void clickEditContract(ContactData contactData) {
         clickElement(By.xpath("//a[contains(@href, 'edit.php?id=" + contactData.getId() + "')]"));
@@ -154,6 +177,9 @@ public class ContactHelper extends HelperBase {
         }
     }
 
+
+
+    @Step(value = "Подтверждение и возврат")
     private void submitAndReturn(By by) {
         clickElement(by);
         clickElement(By.linkText("home page"));
@@ -164,6 +190,7 @@ public class ContactHelper extends HelperBase {
         return getOptionsList().size();
     }
 
+    @Step(value = "Получение списка контактов")
     public ArrayList<ContactData> getContactList() {
         openHomePage();
         ArrayList<ContactData> res = new ArrayList<>();
